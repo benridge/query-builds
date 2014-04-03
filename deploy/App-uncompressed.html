@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>red-light-metrics</title>
+    <title>query-builds</title>
 
     <script type="text/javascript" src="/apps/2.0rc2/sdk.js"></script>
 
@@ -307,9 +307,9 @@ Ext.define("Deft.log.Logger",{alternateClassName:["Deft.Logger"],singleton:true,
     
     _getStartTime: function(build) {
         var buildTime = Date.parse(build.get('Start')),
-            timeZoneOffset = new Date().getTimezoneOffset() * 60 * 1000,
-            correctedTime = buildTime + timeZoneOffset;
-        return correctedTime;
+            timeZoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+        return buildTime + timeZoneOffset;
     },
 
     _getEndTime: function(build) {
@@ -371,19 +371,6 @@ Ext.define("Deft.log.Logger",{alternateClassName:["Deft.Logger"],singleton:true,
         this.buildData.query(optionValues).always(function(builds) {
             resultsController.updateResults(builds, resultsDisplay);
         });
-
-
-//        resultsDisplay.update({
-//            avgGreenLightTime: '1 minute',
-//            avgGreenLightPercent: '40%',
-//            avgRedLightTime: '2 minutes',
-//            avgRedLightPercent: '60%',
-//            numberOfBuilds: 12,
-//            numberOfWorkingDays: 2,
-//            totalGreenLightTime: '5 minutes',
-//            totalRedLightTime: '12 minutes'
-//        });
-
     }
 });
                 Ext.define('rlm.view.BuildDefinitionComboBox', {
@@ -391,7 +378,7 @@ Ext.define("Deft.log.Logger",{alternateClassName:["Deft.Logger"],singleton:true,
     alias: 'widget.builddefinitioncombobox',
     config: {
         fieldLabel: 'Build:',
-        minChars: 1,
+        minChars: 0,
         defaultSelectionPosition: 'none',
         editable: true,
         queryParam: 'ignoreThisParam',
@@ -530,7 +517,7 @@ Ext.define("Deft.log.Logger",{alternateClassName:["Deft.Logger"],singleton:true,
 });
 
             Rally.launchApp('CustomApp', {
-                name:"red-light-metrics",
+                name:"query-builds",
 	            parentRepos:""
             });
 

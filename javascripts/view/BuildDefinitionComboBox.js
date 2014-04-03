@@ -3,7 +3,7 @@ Ext.define('rlm.view.BuildDefinitionComboBox', {
     alias: 'widget.builddefinitioncombobox',
     config: {
         fieldLabel: 'Build:',
-        minChars: 1,
+        minChars: 0,
         defaultSelectionPosition: 'none',
         editable: true,
         queryParam: 'ignoreThisParam',

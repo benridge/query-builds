@@ -36,18 +36,5 @@ Ext.define('rlm.view.AppPanel', {
         this.buildData.query(optionValues).always(function(builds) {
             resultsController.updateResults(builds, resultsDisplay);
         });
-
-
-//        resultsDisplay.update({
-//            avgGreenLightTime: '1 minute',
-//            avgGreenLightPercent: '40%',
-//            avgRedLightTime: '2 minutes',
-//            avgRedLightPercent: '60%',
-//            numberOfBuilds: 12,
-//            numberOfWorkingDays: 2,
-//            totalGreenLightTime: '5 minutes',
-//            totalRedLightTime: '12 minutes'
-//        });
-
     }
 });
