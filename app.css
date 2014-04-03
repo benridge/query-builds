@@ -1,0 +1,33 @@
+.app .submit-button {
+    float: right;
+}
+
+.app .title {
+    font-weight: bold;
+}
+
+.app div, .app label, .app input, .app span, .builddefinition-list li {
+    font-size: 14px !important;
+}
+
+.app .ctr-options {
+    margin: 5px;
+}
+
+.app .results-display {
+    margin: 5px;
+}
+
+.app .results-display span.value {
+    float: right;
+    font-family: Courier;
+}
+
+.app .results-display span.percent {
+    font-weight: bold;
+}
+
+.app .results-display span.label {
+    margin-right: 5px;
+    color: #483d8b;
+}
