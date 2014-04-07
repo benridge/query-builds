@@ -32,14 +32,41 @@
     buildStore: null,
 
     constructor: function() {
-        this.buildStore = Ext.create('rlm.data.FilteredPageableStore', {
+        this.buildStore = Ext.create('Rally.data.WsapiDataStore', {
             model: 'Build',
             fetch: true,
             autoLoad: false,
             context: {
                 project: null
             },
-            limit: Infinity
+            limit: Infinity,
+
+            /**
+             * @Override to fix PageableStore bug where pages 2-n do not apply store's filters
+             * @private
+             */
+
+            _loadNext: function(records, operation, success, origCallback, origScope) {
+                if (this._shouldLoadMorePages(operation)) {
+                    this._loadNextPage(Ext.bind(this._loadNext, this, [origCallback, origScope], true), operation.filters);
+                } else {
+                    this._afterDoneLoadingAllPages(operation, success, origCallback, origScope);
+                }
+            },
+
+            /**
+             * @Override
+             * @private
+             */
+            _loadNextPage: function(callback, filters) {
+                this.loading = true;
+                this.nextPage({
+                    filters: filters,
+                    addRecords: true,
+                    callback: callback,
+                    isPaging: true
+                });
+            }
         });
         this.callParent(arguments);
     },
@@ -87,37 +114,6 @@
     _getFormattedDate: function(date) {
         return moment(date).format('YYYY-MM-DD');
     }
-
-});
-                Ext.define('rlm.data.FilteredPageableStore', {
-    extend: 'Rally.data.PageableStore',
-
-    /**
-     * @Override
-     * @private
-     */
-
-    _loadNext: function(records, operation, success, origCallback, origScope) {
-        if (this._shouldLoadMorePages(operation)) {
-            this._loadNextPage(Ext.bind(this._loadNext, this, [origCallback, origScope], true), operation);
-        } else {
-            this._afterDoneLoadingAllPages(operation, success, origCallback, origScope);
-        }
-    },
-
-    /**
-     * @Override
-     * @private
-     */
-    _loadNextPage: function(callback, operation) {
-        this.loading = true;
-        this.nextPage(Ext.merge(operation, {
-            addRecords: true,
-            callback: callback,
-            isPaging: true
-        }));
-    }
-
 
 });
                 Ext.define('rlm.controller.ResultsController', {
@@ -389,7 +385,7 @@
 
     _afterRender: function() {
         this.mon(this.down('viewoptions'), 'submit', this._onOptionsSubmit, this);
-        this.mon(this.down('viewoptions'), 'setvalue', this._onBuildComboValueSet, this);
+        this.mon(this.down('viewoptions'), 'setvalue', this._onBuildComboValueSet, this, {single: true});
     },
 
 
