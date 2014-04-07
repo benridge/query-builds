@@ -1,6 +1,5 @@
 Ext.define('rlm.view.AppPanel', {
-    extend: 'Ext.panel.Panel',
-    title: 'Query Metrics for a Build',
+    extend: 'Ext.Container',
     alias: 'widget.appPanel',
     layout: {
         type: 'hbox'
@@ -26,15 +25,24 @@ Ext.define('rlm.view.AppPanel', {
 
     _afterRender: function() {
         this.mon(this.down('viewoptions'), 'submit', this._onOptionsSubmit, this);
+        this.mon(this.down('viewoptions'), 'setvalue', this._onBuildComboValueSet, this, {single: true});
     },
 
 
     _onOptionsSubmit: function(optionValues) {
-        var resultsDisplay = this.down('rlmresultsdisplay'),
-            resultsController = Ext.create('rlm.controller.ResultsController');
+        this.down('rlmresultsdisplay').showMask();
+        this.buildData.query(optionValues, this._withQueryResults, this);
+    },
 
-        this.buildData.query(optionValues).always(function(builds) {
-            resultsController.updateResults(builds, resultsDisplay);
-        });
+    _withQueryResults: function(builds) {
+        var resultsController = Ext.create('rlm.controller.ResultsController'),
+            resultsDisplay = this.down('rlmresultsdisplay');
+
+        resultsController.updateResults(builds, resultsDisplay);
+        this.down('rlmresultsdisplay').hideMask();
+    },
+
+    _onBuildComboValueSet: function() {
+        this.down('viewoptions').clickSubmitButton();
     }
 });

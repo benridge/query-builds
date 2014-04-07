@@ -16,6 +16,7 @@
 
 .app .results-display {
     margin: 5px;
+    height: 150px;
 }
 
 .app .results-display span.value {

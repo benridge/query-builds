@@ -8,8 +8,10 @@ Ext.define('rlm.view.BuildDefinitionComboBox', {
         editable: true,
         queryParam: 'ignoreThisParam',
         autoSelect: false,
+        value: '/builddefinition/14104398785',
         storeConfig: {
             model: 'BuildDefinition',
+            autoLoad: true,
             context: {
                 project: null
             }
@@ -21,7 +23,8 @@ Ext.define('rlm.view.BuildDefinitionComboBox', {
         }
     },
 
-    setValue: function(value) {
+    constructor: function(config) {
+        this.config.storeConfig.filters = [this._addLatestFilter()];
         this.callParent(arguments);
     },
 
@@ -29,11 +32,7 @@ Ext.define('rlm.view.BuildDefinitionComboBox', {
         var store = this.getStore();
 
         store.filters.clear();
-        store.filters.add(Ext.create('Rally.data.wsapi.Filter', {
-            property: 'LastBuild.Start',
-            operator: '>',
-            value: new moment().subtract('days', 30).format('YYYY-MM-DD')
-        }));
+        store.filters.add(this._addLatestFilter());
 
         if (!Ext.isEmpty(queryString)) {
             store.filters.add(Ext.create('Rally.data.wsapi.Filter', {
@@ -44,6 +43,14 @@ Ext.define('rlm.view.BuildDefinitionComboBox', {
         }
 
         this.callParent([queryString, forceAll, rawQuery]);
+    },
+
+    _addLatestFilter: function() {
+        return Ext.create('Rally.data.wsapi.Filter', {
+            property: 'LastBuild.Start',
+            operator: '>',
+            value: new moment().subtract('days', 30).format('YYYY-MM-DD')
+        });
     }
 
 });

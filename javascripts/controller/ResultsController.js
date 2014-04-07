@@ -66,6 +66,12 @@ Ext.define('rlm.controller.ResultsController', {
 
         var totalTime = greenTime + redTime;
 
+        if (analyzedBuildCount === 0) {
+            return {
+                errorMessage: "No Builds found for Build Definition."
+            };
+        }
+
         return {
             countingToday: new Date().getHours() < this.END_HOUR,
             avgBuildTime: this._showHoursMinutesSeconds(buildTime/buildTimeCount),

@@ -4,7 +4,6 @@
    "server": "https://rally1.rallydev.com",
    "sdk": "2.0rc2",
    "javascript": [
-      "lib/deft.js",
       "lib/moment.min.js",
       "App.js",
       "javascripts/data/BuildData.js",
